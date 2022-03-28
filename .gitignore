@@ -1,0 +1,15 @@
+# Binaries for programs and plugins
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+
+#Para commitlint e husky
+.husky
+node_modules
+commitlint.config.js
+package-lock.json
+package.json

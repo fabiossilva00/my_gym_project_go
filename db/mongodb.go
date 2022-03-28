@@ -3,32 +3,29 @@ package db
 import (
 	"context"
 	"log"
-	"time"
+	"my_gym_go/config"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const uri = "mongodb://root:pass12345@localhost:27017/?maxPoolSize=20&w=majority"
+var (
+	client *mongo.Client
+)
 
-func InitMongoDb() (*mongo.Client, error) {
+func InitMongoDb(config *config.Configuration) *mongo.Client {
 
-	client, err := mongo.NewClient(options.Client().ApplyURI(uri))
+	c, err := mongo.NewClient(options.Client().ApplyURI(config.URLConexaoDB))
 	if err != nil {
-		log.Println(err)
-		return nil, err
+		log.Panicln(err)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	err = client.Connect(ctx)
-	if err != nil {
-		log.Fatal(err)
-		defer cancel()
-		return nil, err
-	}
+	c.Connect(context.Background())
+	client = c
 
-	defer cancel()
-	defer client.Disconnect(ctx)
+	return c
+}
 
-	return client, nil
+func GetDatabase(name string) *mongo.Database {
+	return client.Database(name)
 }
