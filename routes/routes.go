@@ -11,4 +11,5 @@ func InitHelloWorldRoutes(e *echo.Echo, controllers *controllers.ConfigurationCo
 	e.GET("hello", HelloWorldController.Hello)
 	e.GET("world", HelloWorldController.World)
 	e.GET("exercicios", controllers.ExercicioController.FindAll)
+	e.POST("exercicios", controllers.ExercicioController.SalvarExercicio)
 }

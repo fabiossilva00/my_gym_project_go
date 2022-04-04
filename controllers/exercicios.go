@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"log"
+	"my_gym_go/model"
 	"my_gym_go/service"
 	"net/http"
 
@@ -21,5 +22,28 @@ func (e *ExerciciosController) FindAll(c echo.Context) error {
 	log.Println(exercicios)
 
 	return c.JSON(http.StatusOK, exercicios)
+}
 
+func (e *ExerciciosController) SalvarExercicio(c echo.Context) error {
+	exercicio := new(model.Exercicio)
+
+	if err := c.Bind(exercicio); err != nil {
+		log.Println(err)
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	if err := c.Validate(exercicio); err != nil {
+		log.Println(err)
+		return err
+	}
+
+	var errorResponse model.Response[any]
+
+	exercicio, err := e.exercicioService.SalvarExercicio(*exercicio)
+	if err != nil {
+		errorResponse.Data = err
+		return echo.NewHTTPError(http.StatusInternalServerError, errorResponse)
+	}
+
+	return c.JSON(http.StatusCreated, exercicio)
 }

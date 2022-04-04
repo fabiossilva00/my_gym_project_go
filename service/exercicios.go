@@ -20,3 +20,8 @@ func (e *ExerciciosService) FindAll() []model.Exercicio {
 
 	return exercicios
 }
+
+func (e *ExerciciosService) SalvarExercicio(exercicio model.Exercicio) (*model.Exercicio, error) {
+
+	return &exercicio, nil
+}
