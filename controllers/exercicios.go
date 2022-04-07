@@ -25,7 +25,7 @@ func (e *ExerciciosController) FindAll(c echo.Context) error {
 }
 
 func (e *ExerciciosController) SalvarExercicio(c echo.Context) error {
-	exercicio := new(model.Exercicio)
+	exercicio := new(model.ExercicioRequest)
 
 	if err := c.Bind(exercicio); err != nil {
 		log.Println(err)
@@ -39,11 +39,11 @@ func (e *ExerciciosController) SalvarExercicio(c echo.Context) error {
 
 	var errorResponse model.Response[any]
 
-	exercicio, err := e.exercicioService.SalvarExercicio(*exercicio)
+	exercicioNew, err := e.exercicioService.SalvarExercicio(*exercicio)
 	if err != nil {
-		errorResponse.Data = err
+		errorResponse.Data = err.Error()
 		return echo.NewHTTPError(http.StatusInternalServerError, errorResponse)
 	}
 
-	return c.JSON(http.StatusCreated, exercicio)
+	return c.JSON(http.StatusCreated, exercicioNew)
 }
